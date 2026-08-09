@@ -31,6 +31,7 @@ class FlightPreprocessor:
         df = df.copy()
 
         df = self._rename_columns(df)
+        df = self._convert_string_columns(df)
         df = self._convert_datetime_columns(df)
         df = self._calculate_delays(df)
 
@@ -38,6 +39,12 @@ class FlightPreprocessor:
 
     def _rename_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         return df.rename(columns=self.COLUMN_MAPPING)
+    
+    def _convert_string_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        df["flight_number"] = df["flight_number"].astype("string")
+        df["Código DI"] = df["Código DI"].astype("string")
+
+        return df
 
     def _convert_datetime_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         for column in self.DATETIME_COLUMNS:
